@@ -240,7 +240,7 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
                         : 0,
                     child: widget.disLikeIndicator ??
                         Container(
-                          child: Text('Dislike'),
+                          child: Text('Dislike '),
                         ),
                   ),
                 ),
