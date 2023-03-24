@@ -223,7 +223,7 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
                         : 0,
                     child: widget.likeIndicator ??
                         Container(
-                          child: Text('Like'),
+                          child: Text('Liker'),
                         ),
                   ),
                 ),
@@ -240,7 +240,7 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
                         : 0,
                     child: widget.disLikeIndicator ??
                         Container(
-                          child: Text('Dislike '),
+                          child: Text('Disliker '),
                         ),
                   ),
                 ),
@@ -260,7 +260,7 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
                     child: widget.superLikeIndicator ??
                         Container(
                           margin: EdgeInsets.only(bottom: 40),
-                          child: Text('Super Like'),
+                          child: Text('Super Liker'),
                         ),
                   ),
                 )
