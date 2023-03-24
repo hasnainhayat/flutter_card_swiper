@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_card_swiper/src/card_swiper_controller.dart';
 import 'package:flutter_card_swiper/src/enums.dart';
@@ -61,6 +62,10 @@ class CardSwiper<T extends Widget> extends StatefulWidget {
   /// here you can change the number of cards that are displayed at the same time
   final int numberOfCardsDisplayed;
 
+  final Widget? likeIndicator;
+  final Widget? disLikeIndicator;
+  final Widget? superLikeIndicator;
+
   const CardSwiper({
     Key? key,
     required this.cardBuilder,
@@ -70,7 +75,7 @@ class CardSwiper<T extends Widget> extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
     this.duration = const Duration(milliseconds: 200),
     this.maxAngle = 30,
-    this.threshold = 50,
+    this.threshold = 100,
     this.scale = 0.9,
     this.isDisabled = false,
     this.onTapDisabled,
@@ -81,6 +86,9 @@ class CardSwiper<T extends Widget> extends StatefulWidget {
     this.isVerticalSwipingEnabled = true,
     this.isLoop = true,
     this.numberOfCardsDisplayed = 2,
+    this.superLikeIndicator,
+    this.likeIndicator,
+    this.disLikeIndicator,
   })  : assert(
           maxAngle >= 0 && maxAngle <= 360,
           'maxAngle must be between 0 and 360',
@@ -196,9 +204,67 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
       child: GestureDetector(
         child: Transform.rotate(
           angle: _angle,
-          child: ConstrainedBox(
-            constraints: constraints,
-            child: widget.cardBuilder(context, _currentIndex!),
+          child: Stack(
+            children: [
+              ConstrainedBox(
+                constraints: constraints,
+                child: widget.cardBuilder(context, _currentIndex!),
+              ),
+              if ((_top > -20 && _left > 20) ||
+                  (_top < -20 && (_left > widget.threshold / 1.5)))
+                Positioned(
+                  top: 40,
+                  left: 20,
+                  child: Opacity(
+                    opacity: _left != 0
+                        ? _left < widget.threshold
+                            ? _left / (widget.threshold * 2.5)
+                            : 1
+                        : 0,
+                    child: widget.likeIndicator ??
+                        Container(
+                          child: Text('Like'),
+                        ),
+                  ),
+                ),
+              if ((_top > -20 && _left < -20) ||
+                  (_top < -20 && (-_left > widget.threshold / 1.5)))
+                Positioned(
+                  top: 40,
+                  right: 20,
+                  child: Opacity(
+                    opacity: _left != 0
+                        ? -_left < widget.threshold
+                            ? -_left / (widget.threshold * 2.5)
+                            : 1
+                        : 0,
+                    child: widget.likeIndicator ??
+                        Container(
+                          child: Text('Dislike'),
+                        ),
+                  ),
+                ),
+              if (_top < -20 &&
+                  (_left < widget.threshold / 1.5 &&
+                      -_left < widget.threshold / 1.5))
+                Positioned(
+                  bottom: 40,
+                  left: 0,
+                  right: 0,
+                  child: Opacity(
+                    opacity: _top != 0
+                        ? -_top < widget.threshold
+                            ? -_top / (widget.threshold * 2.5)
+                            : 1
+                        : 0,
+                    child: widget.likeIndicator ??
+                        Container(
+                          margin: EdgeInsets.only(bottom: 40),
+                          child: Text('Super Like'),
+                        ),
+                  ),
+                )
+            ],
           ),
         ),
         onTap: () {
@@ -291,9 +357,7 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
       case CardSwiperState.swipeTop:
         _swipe(context, CardSwiperDirection.top);
         break;
-      case CardSwiperState.swipeBottom:
-        _swipe(context, CardSwiperDirection.bottom);
-        break;
+
       default:
         break;
     }
@@ -455,7 +519,7 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
     _swipeType = SwipeType.swipe;
     if (_top > widget.threshold ||
         _top == 0 && widget.direction == CardSwiperDirection.bottom) {
-      detectedDirection = CardSwiperDirection.bottom;
+      _goBack(context);
     } else {
       detectedDirection = CardSwiperDirection.top;
     }
