@@ -247,11 +247,8 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
               if (_top < -20 &&
                   (_left < widget.threshold / 1.5 &&
                       -_left < widget.threshold / 1.5))
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  top: 0,
+                Align(
+                  alignment: Alignment.center,
                   child: Opacity(
                     opacity: _top != 0
                         ? -_top < widget.threshold
