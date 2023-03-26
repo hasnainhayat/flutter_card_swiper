@@ -494,7 +494,7 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
         _swipeVertical(context);
         break;
 
-      case CardSwiperDirection.bottom:
+      case CardSwiperDirection.reload:
         reloadPreviousCard(AnimationStatus.completed);
         break;
 

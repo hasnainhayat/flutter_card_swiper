@@ -52,7 +52,7 @@ class _ExamplePageState extends State<Example> {
                     child: const Icon(Icons.rotate_right),
                   ),
                   FloatingActionButton(
-                    onPressed: controller.swipeLeft,
+                    onPressed: () => controller.swipeLeft,
                     child: const Icon(Icons.keyboard_arrow_left),
                   ),
                   FloatingActionButton(
@@ -64,7 +64,7 @@ class _ExamplePageState extends State<Example> {
                     child: const Icon(Icons.keyboard_arrow_up),
                   ),
                   FloatingActionButton(
-                    onPressed: controller.swipeBottom,
+                    onPressed: controller.swipeReload,
                     child: const Icon(Icons.keyboard_arrow_down),
                   ),
                 ],
