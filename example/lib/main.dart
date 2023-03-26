@@ -36,7 +36,7 @@ class _ExamplePageState extends State<Example> {
               child: CardSwiper(
                 controller: controller,
                 cardsCount: cards.length,
-                numberOfCardsDisplayed: 3,
+                numberOfCardsDisplayed: 1,
                 onSwipe: _onSwipe,
                 padding: const EdgeInsets.all(24.0),
                 cardBuilder: (context, index) => cards[index],
@@ -81,6 +81,7 @@ class _ExamplePageState extends State<Example> {
     int? currentIndex,
     CardSwiperDirection direction,
   ) {
+    return;
     debugPrint(
       'the card $previousIndex was swiped to the ${direction.name}. Now the card $currentIndex is on top',
     );

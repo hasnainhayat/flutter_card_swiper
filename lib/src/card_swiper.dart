@@ -65,6 +65,7 @@ class CardSwiper<T extends Widget> extends StatefulWidget {
   final Widget? likeIndicator;
   final Widget? disLikeIndicator;
   final Widget? superLikeIndicator;
+  final int indexOffset;
 
   const CardSwiper({
     Key? key,
@@ -89,6 +90,7 @@ class CardSwiper<T extends Widget> extends StatefulWidget {
     this.superLikeIndicator,
     this.likeIndicator,
     this.disLikeIndicator,
+    this.indexOffset = 1,
   })  : assert(
           maxAngle >= 0 && maxAngle <= 360,
           'maxAngle must be between 0 and 360',
@@ -142,6 +144,13 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
   double get _maxAngle => widget.maxAngle * (pi / 180);
 
   int? _currentIndex;
+  int offset = 1;
+  // dynamic setOffset(int offSetIndex) {
+  //   setState(() {
+  //     offset = offSetIndex;
+  //   });
+  // }
+
   int? get _nextIndex => getValidIndexOffset(1);
   bool get _canSwipe => _currentIndex != null && !widget.isDisabled;
 
@@ -346,9 +355,6 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
   //swipe widget from the outside
   void _controllerListener() {
     switch (widget.controller!.state) {
-      case CardSwiperState.swipe:
-        _swipe(context, widget.direction);
-        break;
       case CardSwiperState.swipeLeft:
         _swipe(context, CardSwiperDirection.left);
         break;
@@ -358,9 +364,42 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
       case CardSwiperState.swipeTop:
         _swipe(context, CardSwiperDirection.top);
         break;
+      case CardSwiperState.swipe:
+        _swipe(context, CardSwiperDirection.swipe);
+        break;
 
       default:
         break;
+    }
+  }
+
+  dynamic reloadPreviousCard(AnimationStatus status) {
+    if (status == AnimationStatus.completed) {
+      setState(() {
+        if (_swipeType == SwipeType.none) {
+          final previousIndex = _currentIndex! - 2;
+          final isLastCard = _currentIndex == widget.cardsCount + 1;
+
+          _currentIndex = getValidIndexOffset(-1);
+          widget.onSwipe?.call(
+            previousIndex,
+            _currentIndex,
+            detectedDirection,
+          );
+
+          if (isLastCard) {
+            widget.onEnd?.call();
+          }
+        }
+        _animationController.reset();
+        _left = 0;
+        _top = 0;
+        _total = 0;
+        _angle = 0;
+        _scale = widget.scale;
+        _difference = 40;
+        _swipeType = SwipeType.none;
+      });
     }
   }
 
@@ -384,7 +423,7 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
           final previousIndex = _currentIndex;
           final isLastCard = _currentIndex == widget.cardsCount - 1;
 
-          _currentIndex = _nextIndex;
+          _currentIndex = getValidIndexOffset(1);
           widget.onSwipe?.call(
             previousIndex,
             _currentIndex,
@@ -458,6 +497,10 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
         _top = widget.threshold + 1;
         _swipeVertical(context);
         break;
+      case CardSwiperDirection.swipe:
+        reloadPreviousCard(AnimationStatus.completed);
+        break;
+
       default:
         break;
     }
