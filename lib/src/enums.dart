@@ -6,6 +6,6 @@ enum CardSwiperState {
   swipeBottom,
 }
 
-enum CardSwiperDirection { none, left, right, top, bottom, swipe }
+enum CardSwiperDirection { none, left, right, top, bottom }
 
 enum SwipeType { none, swipe, back }

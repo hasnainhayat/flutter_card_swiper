@@ -364,8 +364,8 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
       case CardSwiperState.swipeTop:
         _swipe(context, CardSwiperDirection.top);
         break;
-      case CardSwiperState.swipe:
-        _swipe(context, CardSwiperDirection.swipe);
+      case CardSwiperState.swipeBottom:
+        _swipe(context, CardSwiperDirection.bottom);
         break;
 
       default:
@@ -493,11 +493,8 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
         _top = -1;
         _swipeVertical(context);
         break;
+
       case CardSwiperDirection.bottom:
-        _top = widget.threshold + 1;
-        _swipeVertical(context);
-        break;
-      case CardSwiperDirection.swipe:
         reloadPreviousCard(AnimationStatus.completed);
         break;
 
