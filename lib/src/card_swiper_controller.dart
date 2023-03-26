@@ -30,8 +30,8 @@ class CardSwiperController extends ChangeNotifier {
   }
 
   //swipe the card to the bottom side by changing the status of the controller
-  void swipeBottom() {
-    state = CardSwiperState.swipeBottom;
+  void swipeReload() {
+    state = CardSwiperState.swipeReload;
     notifyListeners();
   }
 }
