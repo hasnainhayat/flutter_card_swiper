@@ -354,6 +354,8 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
 
   //swipe widget from the outside
   void _controllerListener() {
+    CardSwiperState state = widget.controller!.state!;
+    print(state.toString());
     switch (widget.controller!.state) {
       case CardSwiperState.swipeLeft:
         _swipe(context, CardSwiperDirection.left);
@@ -364,8 +366,8 @@ class _CardSwiperState<T extends Widget> extends State<CardSwiper<T>>
       case CardSwiperState.swipeTop:
         _swipe(context, CardSwiperDirection.top);
         break;
-      case CardSwiperState.swipeBottom:
-        _swipe(context, CardSwiperDirection.bottom);
+      case CardSwiperState.swipeReload:
+        _swipe(context, CardSwiperDirection.reload);
         break;
 
       default:

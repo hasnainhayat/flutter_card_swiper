@@ -48,7 +48,7 @@ class _ExamplePageState extends State<Example> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   FloatingActionButton(
-                    onPressed: controller.swipe,
+                    onPressed: controller.swipeReload,
                     child: const Icon(Icons.rotate_right),
                   ),
                   FloatingActionButton(
